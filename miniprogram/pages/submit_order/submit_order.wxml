@@ -1,0 +1,40 @@
+<!--pages/submit_order/submit_order.wxml-->
+<!-- <view style="margin-top: {{menuPosition.top}}px; height: {{menuPosition.height}}px;line-height: {{menuPosition.height}}px;" class="page-title">小程序打开微信小店</view> -->
+<view>
+  <!-- <text>pages/submit_order/submit_order.wxml</text> -->
+  <view class="container">
+    <view style="display: flex; flex-direction: row;">
+      <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">+ 添加货物</button>
+      <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">提交订单</button>
+    </view>
+    <!-- 表头 -->
+    <view class="grid-header">
+      <view class="header-item">快递单号</view>
+      <view class="header-item">货物品名</view>
+      <view class="header-item">单价</view>
+      <view class="header-item">备注</view>
+    </view>
+  
+    <!-- 表格内容 -->
+    <view class="grid-row" wx:for="{{goodsList}}" wx:key="trackingNumber"  bindlongpress="onLongPress" data-index="{{index}}">
+      <view class="grid-item">{{item.trackingNumber}}</view>
+      <view class="grid-item">{{item.name}}</view>
+      <view class="grid-item">{{item.price}}</view>
+      <view class="grid-item">{{item.remark}}</view>
+    </view>
+
+    <view style="text-align: center;margin-top: 1vh;">
+      <text style="font-size: 12px;color:red;">长按删除货物</text>
+    </view>
+    
+    <!-- 总计 -->
+    <view class="summary">
+      <view class="summary-item">总价: {{totalPrice}} 元</view>
+      <view class="summary-item">货物数量: {{totalCount}} 件</view>
+    </view>
+
+    
+
+  </view>
+  <good-modal tipShow="{{tipShow}}" bind:myEvent="handleChildEvent"></good-modal>
+</view>

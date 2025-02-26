@@ -1,0 +1,33 @@
+<!--components/goodModal.wxml-->
+<view class="modal-contianer" wx:if="{{isShow}}">
+  <view class="modal">
+    <view class="modal-content">
+      <view class="modal-title">登记新货物</view>
+      <view class="modal-desc"></view>
+      <view class="modal-link"></view>
+      
+      <view class="input-item">
+        <text>快递单号</text>
+        <input bindinput="onTNInput" style="color:gray" auto-focus placeholder="请填写发往仓库的快递"/>
+      </view>
+      <view class="input-item">
+        <text>货物品名</text>
+        <input bindinput="onNameInput" style="color:gray" placeholder="请填写名称"/>
+      </view>
+      <view class="input-item">
+        <text>单价</text>
+        <input bindinput="onPriceInput" type="number" style="color:gray" placeholder="请填写价格"/>
+      </view>
+      <view class="input-item">
+        <text>备注</text>
+        <input bindinput="onRemarkInput" style="color:gray" placeholder="请填写备注"/>
+      </view>
+
+      
+    </view>
+    <view class="modal-btn-group">
+      <button class="copy-btn" bind:tap="sendDataToParent">登记</button>
+      <button class="close-btn" bind:tap="onClose">取消</button>
+    </view>
+  </view>
+</view>
