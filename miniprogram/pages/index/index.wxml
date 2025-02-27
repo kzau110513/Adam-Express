@@ -4,12 +4,14 @@
   <view class="banner-container">
     <image src="../../images/banner.png" mode="aspectFill" class="banner" />
   </view>
+  <view style="height: 20vh;">
+    <t-button bind:tap="navigateToTargetPage" theme="primary" block content="新建预报"></t-button>
+    <t-button bind:tap="navigateToTargetPage" theme="primary" block content="查看订单"></t-button>
+    <t-button bind:tap="navigateToTargetPage" theme="primary" block content="新建预报"></t-button>
+  </view>
   <view class="tabs">
     <view class="tabs-body">
       <block wx:if="{{selectedItemIndex===1}}">
-        <view style="height: 20vh;">
-          <t-button bind:tap="navigateToTargetPage" theme="primary" block content="新建预报"></t-button>
-        </view>
         <block wx:if="{{isPreview}}">
           <image bind:tap="onOpenTipsModal" src="../../images/shop_home.png" mode="widthFix" style="width: 100%;"></image>
         </block>

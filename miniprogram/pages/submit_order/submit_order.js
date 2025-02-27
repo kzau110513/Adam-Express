@@ -7,32 +7,74 @@ Page({
   data: {
     menuPosition: wx.getMenuButtonBoundingClientRect(),
     goodsList: [
-      { trackingNumber: '88888888888888888888123456789', name: '商品A', price: 100, remark: '无' },
-      { trackingNumber: '987654321', name: '商品B', price: 200, remark: '易碎' },
-      { trackingNumber: '456789123', name: '商品C', price: 150, remark: '无' },
+      // {
+      //   trackingNumber: '88888888888888888888123456789',
+      //   name: '商品A',
+      //   price: 100,
+      //   remark: '无'
+      // },
+      // {
+      //   trackingNumber: '987654321',
+      //   name: '商品B',
+      //   price: 200,
+      //   remark: '易碎'
+      // },
+      // {
+      //   trackingNumber: '456789123',
+      //   name: '商品C',
+      //   price: 150,
+      //   remark: '无'
+      // },
       // { trackingNumber: '456789123', name: '商品C', price: 150, remark: 'you' },
       // 可以继续添加更多货物信息
     ],
     totalPrice: 0,
     totalCount: 0,
-    tipShow:false,
-    title:"",
-    desc:"",
-    url:"",
+    tipShow: false,
+    title: "",
+    desc: "",
+    url: "",
+    db: ""
   },
 
-  showModal(){
+  showModal() {
     this.setData({
-      tipShow:true
+      tipShow: true
     })
   },
 
-  calculateTotal() {
-    const goodsList = this.data.goodsList;
-    let totalPrice = 0;
-    let totalCount = goodsList.length;
+  async calculateTotal() {
+    // this.data.db.collection('adam-express-order').get().then(res => {
+    //   // res.data 是一个包含集合中有权限访问的所有记录的数据，不超过 20 条
+    //   console.log(res)
+    //   this.setData({
+    //     goodsList: res.data
+    //   })
+    //   let totalPrice = 0;
+    //   let totalCount = this.data.goodsList.length;
 
-    goodsList.forEach(item => {
+    //   goodsList.forEach(item => {
+    //     totalPrice += item.price;
+    //   });
+
+    //   this.setData({
+    //     totalPrice: totalPrice,
+    //     totalCount: totalCount
+    //   });
+    // })
+    wx.showLoading({
+      title: '获取订单信息',
+    })
+    const res = await this.data.db.collection('adam-express-order').get()
+    wx.hideLoading()
+    console.log(res)
+    this.setData({
+      goodsList: res.data
+    })
+    let totalPrice = 0;
+    let totalCount = this.data.goodsList.length;
+
+    this.data.goodsList.forEach(item => {
       totalPrice += item.price;
     });
 
@@ -44,14 +86,14 @@ Page({
 
   handleChildEvent(event) {
     // 从 event.detail 中获取子组件传递的数据
-    const good  = event.detail;
+    const good = event.detail;
     // console.log(good)
     this.setData({
-      goodsList:[...this.data.goodsList, good]
+      goodsList: [...this.data.goodsList, good]
     })
     this.calculateTotal()
   },
-  
+
   onLongPress: function (event) {
     console.log(event)
 
@@ -78,6 +120,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      db: wx.cloud.database()
+    })
     this.calculateTotal()
   },
 
