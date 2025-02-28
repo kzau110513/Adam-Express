@@ -1,40 +1,19 @@
 // pages/submit_order/submit_order.js
+const { init } = require("@cloudbase/wx-cloud-client-sdk");
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    menuPosition: wx.getMenuButtonBoundingClientRect(),
-    goodsList: [
-      // {
-      //   trackingNumber: '88888888888888888888123456789',
-      //   name: '商品A',
-      //   price: 100,
-      //   remark: '无'
-      // },
-      // {
-      //   trackingNumber: '987654321',
-      //   name: '商品B',
-      //   price: 200,
-      //   remark: '易碎'
-      // },
-      // {
-      //   trackingNumber: '456789123',
-      //   name: '商品C',
-      //   price: 150,
-      //   remark: '无'
-      // },
-      // { trackingNumber: '456789123', name: '商品C', price: 150, remark: 'you' },
-      // 可以继续添加更多货物信息
-    ],
+    // menuPosition: wx.getMenuButtonBoundingClientRect(),
+    deliveryList: [], // 快递列表
     totalPrice: 0,
     totalCount: 0,
     tipShow: false,
-    title: "",
-    desc: "",
-    url: "",
-    db: ""
+    db: "",
+    models: ""
   },
 
   showModal() {
@@ -48,12 +27,12 @@ Page({
     //   // res.data 是一个包含集合中有权限访问的所有记录的数据，不超过 20 条
     //   console.log(res)
     //   this.setData({
-    //     goodsList: res.data
+    //     deliveryList: res.data
     //   })
     //   let totalPrice = 0;
-    //   let totalCount = this.data.goodsList.length;
+    //   let totalCount = this.data.deliveryList.length;
 
-    //   goodsList.forEach(item => {
+    //   deliveryList.forEach(item => {
     //     totalPrice += item.price;
     //   });
 
@@ -62,36 +41,48 @@ Page({
     //     totalCount: totalCount
     //   });
     // })
-    wx.showLoading({
-      title: '获取订单信息',
-    })
-    const res = await this.data.db.collection('adam-express-order').get()
-    wx.hideLoading()
-    console.log(res)
-    this.setData({
-      goodsList: res.data
-    })
-    let totalPrice = 0;
-    let totalCount = this.data.goodsList.length;
 
-    this.data.goodsList.forEach(item => {
-      totalPrice += item.price;
-    });
+    try {
+      wx.showLoading({
+        title: '获取订单信息',
+      })
+      const res = await this.data.db.collection('adam-express-order').get()
+      wx.hideLoading()
+      console.log(res)
+      this.setData({
+        deliveryList: res.data
+      })
+      let totalPrice = 0;
+      let totalCount = this.data.deliveryList.length;
 
-    this.setData({
-      totalPrice: totalPrice,
-      totalCount: totalCount
-    });
+      this.data.deliveryList.forEach(item => {
+        totalPrice += item.price;
+      });
+
+      this.setData({
+        totalPrice: totalPrice,
+        totalCount: totalCount
+      });
+    } catch (error) {
+      wx.showToast({
+        title: '获取数据失败',
+        icon: 'error'
+      })
+    }
+
   },
 
   handleChildEvent(event) {
     // 从 event.detail 中获取子组件传递的数据
-    const good = event.detail;
-    // console.log(good)
+    const delivery = event.detail;
+    // console.log(delivery)
     this.setData({
-      goodsList: [...this.data.goodsList, good]
+      deliveryList: [...this.data.deliveryList, delivery]
     })
-    this.calculateTotal()
+    wx.showToast({
+      title: '添加快递成功',
+    })
+    // this.calculateTotal()
   },
 
   onLongPress: function (event) {
@@ -109,21 +100,42 @@ Page({
   },
 
   deleteRow: function (index) {
-    const goodsList = this.data.goodsList;
-    goodsList.splice(index, 1);
+    const deliveryList = this.data.deliveryList;
+    deliveryList.splice(index, 1);
     this.setData({
-      goodsList: goodsList
+      deliveryList: deliveryList
     });
+  },
+
+  // only for test
+  getOpenid: async function name(params) {
+    
+    const {
+      data
+    } = await this.data.models.client.get({
+      filter: {
+        where: {
+          wechat_openid: {
+            $eq: "ooQhZ7O4UASW7RIiVmN5oHexvdjA",
+          },
+        },
+      },
+    });
+    console.log(data)
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const wxcloud = init(wx.cloud);
+    const models = wxcloud.models;
     this.setData({
+      models: models,
       db: wx.cloud.database()
     })
-    this.calculateTotal()
+    // this.calculateTotal()
+    // this.getOpenid()
   },
 
   /**

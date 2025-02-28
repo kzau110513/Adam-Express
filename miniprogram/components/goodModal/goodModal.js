@@ -6,12 +6,12 @@ Component({
    */
   properties: {
     tipShow: Boolean,
-    good:{
-      trackingNumber: "",
-      name: "",
-      price: 0,
-      remark: "",
-    }
+    // delivery:{
+    //   tracking_number: "",
+    //   goods_description: "",
+    //   price: 0,
+    //   remark: "",
+    // }
   },
   observers: {
     tipShow: function (value) {
@@ -29,26 +29,14 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    onTNInput(event) {
-      this.setData({
-        'good.trackingNumber': event.detail.value // 更新 inputValue
-      });
+    // 提交表格
+    formSubmit: function (e) {
+      // console.log('form发生了submit事件，携带数据为：', e.detail.value)
+      this.sendDataToParent(e.detail.value)
     },
-    onNameInput(event) {
-      this.setData({
-        'good.name': event.detail.value // 更新 inputValue
-      });
-    },
-    onPriceInput(event) {
-      this.setData({
-        'good.price': event.detail.value // 更新 inputValue
-      });
-      console.log(this.data.good.price)
-    },
-    onRemarkInput(event) {
-      this.setData({
-        'good.remark': event.detail.value // 更新 inputValue
-      });
+    formReset: function () {
+      // console.log('form发生了reset事件')
+      this.onClose()
     },
 
     onClose(){
@@ -57,13 +45,10 @@ Component({
       })
     },
 
-    sendDataToParent() {
+    sendDataToParent(delivery) {
       // 触发自定义事件 'myEvent'，并传递数据
-      const good = {...this.data.good, price:Number(this.data.good.price)}
-      this.triggerEvent('myEvent', good);
-      wx.showToast({
-        title: '添加货物成功',
-      })
+      delivery = {...delivery, price:Number(delivery.price)}
+      this.triggerEvent('myEvent', delivery);
       this.setData({
         isShow:false
       })

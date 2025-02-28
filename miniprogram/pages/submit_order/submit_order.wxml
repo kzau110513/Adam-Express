@@ -4,21 +4,21 @@
   <!-- <text>pages/submit_order/submit_order.wxml</text> -->
   <view class="container">
     <view style="display: flex; flex-direction: row;">
-      <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">+ 添加货物</button>
+      <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">+ 添加快递</button>
       <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">提交订单</button>
     </view>
     <!-- 表头 -->
     <view class="grid-header">
       <view class="header-item">快递单号</view>
       <view class="header-item">货物品名</view>
-      <view class="header-item">单价</view>
+      <view class="header-item">价格</view>
       <view class="header-item">备注</view>
     </view>
   
     <!-- 表格内容 -->
-    <view class="grid-row" wx:for="{{goodsList}}" wx:key="trackingNumber"  bindlongpress="onLongPress" data-index="{{index}}">
-      <view class="grid-item">{{item.trackingNumber}}</view>
-      <view class="grid-item">{{item.name}}</view>
+    <view class="grid-row" wx:for="{{deliveryList}}" wx:key="tracking_number"  bindlongpress="onLongPress" data-index="{{index}}">
+      <view class="grid-item">{{item.tracking_number}}</view>
+      <view class="grid-item">{{item.goods_description}}</view>
       <view class="grid-item">{{item.price}}</view>
       <view class="grid-item">{{item.remark}}</view>
     </view>
