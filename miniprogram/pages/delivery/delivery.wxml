@@ -1,0 +1,81 @@
+<!--pages/delivery/delivery.wxml-->
+<view class="container">
+  <!-- Tabs -->
+  <!-- <view class="tabs">
+    <view 
+      class="tab {{currentTab === 0 ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-index="0"
+    >
+      未入库
+    </view>
+    <view 
+      class="tab {{currentTab === 1 ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-index="1"
+    >
+      已入库
+    </view>
+  </view> -->
+
+  <button bind:tap="navigateToTargetPage" type="primary">提交快递信息</button>
+  <view class="tabs-header">
+    <view wx:for="{{menuItems}}" wx:key="key" class="{{selectedItemIndex===item.key?'tabs-header-item-selected':'tabs-header-item-normal'}}" data-key="{{item.key}}" bind:tap="onChangeTab">
+      {{item.title}}
+    </view>
+  </view>
+
+  <!-- Table -->
+  <!-- <view class="table">
+    <view class="table-header">
+      <view class="column">快递单号</view>
+      <view class="column">商品描述</view>
+      <view class="column">价格</view>
+      <view class="column">备注</view>
+    </view>
+    <view class="table-body">
+      <block wx:for="{{tableData}}" wx:key="index">
+        <view class="table-row">
+          <checkbox class="checkbox" checked="{{item.checked}}" bindtap="toggleCheckbox" data-index="{{index}}" />
+          <view class="column">{{item.trackingNumber}}</view>
+          <view class="column">{{item.description}}</view>
+          <view class="column">{{item.price}}</view>
+          <view class="column">{{item.remark}}</view>
+        </view>
+      </block>
+    </view>
+  </view> -->
+
+  <checkbox-group bindchange="checkboxChange">
+    <view wx:for="{{tableData}}" wx:key="index" bind:tap="selectItem" data-index="{{index}}">
+      <view>
+        <view class="list-item">
+          <view class="header">
+            <checkbox class="checkbox" value="{{index}}" checked="{{item.checked}}"/>
+            <text>快递单号: {{ item.tracking_number }}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">商品名称:</text>
+            <text class="value">{{ item.goods_description }}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">总价:</text>
+            <text class="value">¥{{ item.price }}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">备注:</text>
+            <text class="value">{{ item.remark }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </checkbox-group>
+
+  <!-- Footer -->
+  <view class="footer">
+    <checkbox class="checkbox" checked="{{isAllChecked}}" bindtap="toggleAll" />
+    <text>全选</text>
+    <text>已选择 {{selectedCount}} 件</text>
+    <button type="primary" size="mini" bindtap="submitOrder">提交订单</button>
+  </view>
+</view>

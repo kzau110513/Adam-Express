@@ -1,8 +1,36 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/submit_order/submit_order"
+    "pages/create_delivery/create_delivery",
+    "pages/order/order",
+    "pages/delivery/delivery"
   ],
+  "tabBar": {
+    "custom": true,
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [{
+        "pagePath": "pages/index/index",
+        "iconPath": "images/icon_component.png",
+        "selectedIconPath": "images/icon_component_HL.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/delivery/delivery",
+        "iconPath": "images/icon_API.png",
+        "selectedIconPath": "images/icon_API_HL.png",
+        "text": "国内快递"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "iconPath": "images/icon_API.png",
+        "selectedIconPath": "images/icon_API_HL.png",
+        "text": "海运订单"
+      }
+    ]
+  },
   "window": {
     "navigationBarBackgroundColor": "#fff",
     "backgroundColor": "#fff",

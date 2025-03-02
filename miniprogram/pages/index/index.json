@@ -2,7 +2,6 @@
   "navigationBarTitleText": "首页",
   "navigationBarTextStyle":"black",
   "usingComponents": {
-    "tips-modal": "/components/tipsModal/tipsModal",
-    "t-button": "/miniprogram_npm/tdesign-miniprogram/button/button"
+    "tips-modal": "/components/tipsModal/tipsModal"
   }
 }
