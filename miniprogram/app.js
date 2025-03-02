@@ -18,59 +18,75 @@ App({
         traceUser: true,
       });
 
-      // initialize data models (wechat cloud)
-      const client = init(wx.cloud);
-      const models = client.models;
-
       try {
-        // get the current openid
-        console.log("//getting openid...")
-        const {
-          result
-        } = await wx.cloud.callFunction({
-          name: 'getOpenid',
-          // data:{
-          //   message:'helloCloud',
-          // }
-        })
-        const openid = result.openid
-
-        console.log("//getting client...")
-        // see if current openid already exists
-        const {
-          data
-        } = await models.client.get({
-          filter: {
-            where: {
-              wechat_openid: {
-                $eq: openid, 
-              },
-            },
-          },
-        });
-
-        // this client is not in database
-        if (Object.keys(data).length === 0) {
-          // create new client
-          console.log("//create new client")
-          await models.client.create({
-            data: {
-              wechat_openid: openid,
-              full_name: ""
-            },
-          });
-        }else{
-          console.log("//the client already exists")
-        }
-        // store openid in local storage for future use
-        wx.setStorageSync('openid', openid)
-        
+        await this.getOpenid()
       } catch (error) {
         console.log("//program error occurs in initial phase (app.js)")
-        console.log(error)
+        console.log("//" + error)
       }
     }
 
     this.globalData = {};
+  },
+
+  async getOpenid(params) {
+    if (wx.getStorageSync('client_id') !== "") {
+      console.log("//client_id already in local storage")
+    } else {
+      console.log("//client_id not in local storage")
+
+      // get the current openid
+      console.log("//getting openid...")
+      const {
+        result
+      } = await wx.cloud.callFunction({
+        name: 'getOpenid',
+        // data:{
+        //   message:'helloCloud',
+        // }
+      })
+      const openid = result.openid
+
+      console.log("//getting client...")
+      // initialize data models (wechat cloud)
+      const client = init(wx.cloud);
+      const models = client.models;
+      // see if current openid already exists
+      const res_get = await models.client.get({
+        select: {
+          _id: true,
+        },
+        filter: {
+          where: {
+            wechat_openid: {
+              $eq: openid,
+            },
+          },
+        },
+      });
+      
+      let client_id = ""
+      // this client is not in database
+      if (!('_id' in res_get.data)){
+        // create new client
+        console.log("//create new client")
+        const res_create = await models.client.create({
+          data: {
+            wechat_openid: openid,
+            full_name: ""
+          },
+        });
+        client_id = res_create.data.id
+      }
+      //  this client is in database, restore it in local storage
+      else {
+        console.log("//the client already exists")
+        client_id = res_get.data._id
+      }
+      
+      // store openid in local storage for future use
+      console.log("//set client_id in local strorage")
+      wx.setStorageSync('client_id', client_id)
+    }
   }
 });
