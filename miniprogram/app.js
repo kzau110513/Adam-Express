@@ -3,7 +3,10 @@ const {
   init
 } = require("@cloudbase/wx-cloud-client-sdk");
 App({
-  globalData: {},
+  globalData: {
+    test: "test",
+    models: ""
+  },
   onLaunch: async function () {
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力');
@@ -18,6 +21,10 @@ App({
         traceUser: true,
       });
 
+      const client = init(wx.cloud);
+      const models = client.models;
+      this.globalData.models = models
+
       try {
         await this.getOpenid()
       } catch (error) {
@@ -25,8 +32,6 @@ App({
         console.log("//" + error)
       }
     }
-
-    this.globalData = {};
   },
 
   async getOpenid(params) {
@@ -49,10 +54,10 @@ App({
 
       console.log("//getting client...")
       // initialize data models (wechat cloud)
-      const client = init(wx.cloud);
-      const models = client.models;
+      // const client = init(wx.cloud);
+      // const models = client.models;
       // see if current openid already exists
-      const res_get = await models.client.get({
+      const res_get = await this.globalData.models.client.get({
         select: {
           _id: true,
         },
@@ -70,7 +75,7 @@ App({
       if (!('_id' in res_get.data)){
         // create new client
         console.log("//create new client")
-        const res_create = await models.client.create({
+        const res_create = await this.globalData.models.client.create({
           data: {
             wechat_openid: openid,
           },
@@ -87,5 +92,5 @@ App({
       console.log("//set client_id in local strorage")
       wx.setStorageSync('client_id', client_id)
     }
-  }
+  },
 });

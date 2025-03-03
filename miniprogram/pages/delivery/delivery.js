@@ -1,7 +1,5 @@
 // pages/delivery/delivery.js
-const {
-  init
-} = require("@cloudbase/wx-cloud-client-sdk");
+const app = getApp()
 
 Page({
 
@@ -39,7 +37,7 @@ Page({
       // },
       // 可以添加更多数据
     ],
-    db: "",
+    models: "",
     pageSize: 10,
     pageNumber: 1,
   },
@@ -114,12 +112,12 @@ Page({
 
   async getDeliveryList(pageSize, pageNumber, status) {
     try {
-      const res_list = await this.data.db.domestic_delivery.list({
+      const res_list = await app.globalData.models.domestic_delivery.list({
         filter: {
           where: {
             $and: [{
                 client_id: {
-                  $eq: this.data.client_id,
+                  $eq: wx.getStorageSync("client_id"),
                 },
               },
               {
@@ -136,6 +134,7 @@ Page({
         // envType: pre 体验环境， prod 正式环境
         // envType: "pre",
       });
+      console.log("//get delivery list from models")
       console.log(res_list)
       this.setData({
         tableData: res_list.data.records
@@ -149,14 +148,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const client = init(wx.cloud);
-    const models = client.models;
-    this.data.db = models
-    const client_id = wx.getStorageSync("client_id")
-    this.setData({
-      client_id: client_id
-    })
-    this.getDeliveryList(this.data.pageSize, this.data.pageNumber, this.data.selectedStatus)
+
   },
 
   /**
@@ -177,6 +169,8 @@ Page({
         })
       })
     }
+    // console.log("test")
+    this.getDeliveryList(this.data.pageSize, this.data.pageNumber, this.data.selectedStatus)
   },
 
   /**
