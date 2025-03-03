@@ -73,7 +73,6 @@ App({
         const res_create = await models.client.create({
           data: {
             wechat_openid: openid,
-            full_name: ""
           },
         });
         client_id = res_create.data.id

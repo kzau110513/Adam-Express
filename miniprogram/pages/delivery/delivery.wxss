@@ -33,15 +33,21 @@
 
 .tabs-header{
   display: flex;
+  align-self:stretch;
   justify-content: space-around;
+  margin-bottom: 10px;
 }
 .tabs-header-item-normal{
+  text-align: center;
   line-height: 43px; 
+  flex-grow: 1;
 }
 .tabs-header-item-selected{
+  text-align: center;
   line-height: 43px; 
   border-bottom: 2px #0052D9 solid; 
   color: #0052D9;
+  flex-grow: 1;
 }
 
 /* .table {

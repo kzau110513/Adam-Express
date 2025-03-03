@@ -20,9 +20,9 @@
 
   <button bind:tap="navigateToTargetPage" type="primary">提交快递信息</button>
   <view class="tabs-header">
-    <view wx:for="{{menuItems}}" wx:key="key" class="{{selectedItemIndex===item.key?'tabs-header-item-selected':'tabs-header-item-normal'}}" data-key="{{item.key}}" bind:tap="onChangeTab">
-      {{item.title}}
-    </view>
+    <block wx:for="{{menuItems}}" wx:key="key">
+      <view data-key="{{item.key}}" class="{{selectedStatus===item.key?'tabs-header-item-selected':'tabs-header-item-normal'}}" bind:tap="onChangeTab">{{item.title}}</view>
+    </block>
   </view>
 
   <!-- Table -->
@@ -46,12 +46,12 @@
     </view>
   </view> -->
 
-  <checkbox-group bindchange="checkboxChange">
+  <checkbox-group>
     <view wx:for="{{tableData}}" wx:key="index" bind:tap="selectItem" data-index="{{index}}">
       <view>
         <view class="list-item">
           <view class="header">
-            <checkbox class="checkbox" value="{{index}}" checked="{{item.checked}}"/>
+            <checkbox class="checkbox" value="{{index}}" checked="{{item.checked}}" />
             <text>快递单号: {{ item.tracking_number }}</text>
           </view>
           <view class="info-row">
