@@ -20,24 +20,7 @@ Page({
     currentTab: 0, // 当前选中的tab
     isAllChecked: false, // 是否全选
     selectedCount: 0, // 已选择的件数
-    tableData: [
-      // {
-      //   tracking_number: '123456789',
-      //   goods_description: '商品A',
-      //   price: '100元',
-      //   remark: '无',
-      //   checked: false,
-      // },
-      // {
-      //   tracking_number: '987654321',
-      //   goods_description: '商品B',
-      //   price: '200元',
-      //   remark: '无',
-      //   checked: false,
-      // },
-      // 可以添加更多数据
-    ],
-    models: "",
+    tableData: [],
     pageSize: 10,
     pageNumber: 1,
   },

@@ -5,7 +5,7 @@
   <view class="container">
     <view style="display: flex; flex-direction: row;">
       <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">+ 添加快递</button>
-      <button size="mini" type="primary" bind:tap="showModal" style="width: 15vh;">提交订单</button>
+      <button size="mini" type="primary" bind:tap="submit_deliveries" style="width: 15vh;">提交订单</button>
     </view>
     <!-- 表头 -->
     <view class="grid-header">

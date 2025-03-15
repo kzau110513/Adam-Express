@@ -4,7 +4,6 @@ const {
 } = require("@cloudbase/wx-cloud-client-sdk");
 App({
   globalData: {
-    test: "test",
     models: ""
   },
   onLaunch: async function () {

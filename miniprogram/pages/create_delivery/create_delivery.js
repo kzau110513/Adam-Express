@@ -1,5 +1,9 @@
 // pages/submit_order/submit_order.js
-const { init } = require("@cloudbase/wx-cloud-client-sdk");
+const {
+  init
+} = require("@cloudbase/wx-cloud-client-sdk");
+
+const app = getApp()
 
 Page({
 
@@ -12,7 +16,6 @@ Page({
     totalPrice: 0,
     totalCount: 0,
     tipShow: false,
-    db: "",
     models: ""
   },
 
@@ -22,54 +25,18 @@ Page({
     })
   },
 
-  async calculateTotal() {
-    // this.data.db.collection('adam-express-order').get().then(res => {
-    //   // res.data 是一个包含集合中有权限访问的所有记录的数据，不超过 20 条
-    //   console.log(res)
-    //   this.setData({
-    //     deliveryList: res.data
-    //   })
-    //   let totalPrice = 0;
-    //   let totalCount = this.data.deliveryList.length;
+  calculateTotal() {
+    let totalPrice = 0;
+    let totalCount = this.data.deliveryList.length;
 
-    //   deliveryList.forEach(item => {
-    //     totalPrice += item.price;
-    //   });
+    this.data.deliveryList.forEach(item => {
+      totalPrice += item.price;
+    });
 
-    //   this.setData({
-    //     totalPrice: totalPrice,
-    //     totalCount: totalCount
-    //   });
-    // })
-
-    try {
-      wx.showLoading({
-        title: '获取订单信息',
-      })
-      const res = await this.data.db.collection('adam-express-order').get()
-      wx.hideLoading()
-      console.log(res)
-      this.setData({
-        deliveryList: res.data
-      })
-      let totalPrice = 0;
-      let totalCount = this.data.deliveryList.length;
-
-      this.data.deliveryList.forEach(item => {
-        totalPrice += item.price;
-      });
-
-      this.setData({
-        totalPrice: totalPrice,
-        totalCount: totalCount
-      });
-    } catch (error) {
-      wx.showToast({
-        title: '获取数据失败',
-        icon: 'error'
-      })
-    }
-
+    this.setData({
+      totalPrice: totalPrice,
+      totalCount: totalCount
+    });
   },
 
   handleChildEvent(event) {
@@ -82,7 +49,7 @@ Page({
     wx.showToast({
       title: '添加快递成功',
     })
-    // this.calculateTotal()
+    this.calculateTotal()
   },
 
   onLongPress: function (event) {
@@ -105,37 +72,43 @@ Page({
     this.setData({
       deliveryList: deliveryList
     });
+    this.calculateTotal()
   },
 
-  // only for test
-  getOpenid: async function name(params) {
-    
-    const {
-      data
-    } = await this.data.models.client.get({
-      filter: {
-        where: {
-          wechat_openid: {
-            $eq: "ooQhZ7O4UASW7RIiVmN5oHexvdjA",
-          },
-        },
-      },
+  async submit_deliveries() {
+    console.log("submit")
+    const newDeliveries = this.data.deliveryList
+    const client_id = wx.getStorageSync("client_id")
+    newDeliveries.forEach(delivery => {
+      delivery.client_id = {
+        _id: client_id
+      }
+      delivery.status = 0
     });
-    console.log(data)
+    console.log(newDeliveries)
+    try {
+      const {
+        data
+      } = await app.globalData.models.domestic_delivery.create({
+        // data: newDeliveries,
+        // // envType: pre 体验环境， prod 正式环境
+        // // envType: "pre",
+        data: newDeliveries[0],
+      });
+      
+
+      console.log(data);
+    } catch (error) {
+      console.log(error)
+    }
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const wxcloud = init(wx.cloud);
-    const models = wxcloud.models;
-    this.setData({
-      models: models,
-      db: wx.cloud.database()
-    })
     // this.calculateTotal()
-    // this.getOpenid()
   },
 
   /**
@@ -148,8 +121,8 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow(){
-    
+  onShow() {
+
   },
 
   /**
