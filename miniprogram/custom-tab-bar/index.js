@@ -20,6 +20,12 @@ Component({
       iconPath: "/images/icon_API.png",
       selectedIconPath: "/images/icon_API_HL.png",
       text: "海运订单"
+    },
+    {
+      pagePath: "/pages/my_info/my_info",
+      iconPath: "/images/icon_API.png",
+      selectedIconPath: "/images/icon_API_HL.png",
+      text: "我的"
     }
   ]
   },

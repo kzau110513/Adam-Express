@@ -1,6 +1,7 @@
 /* pages/delivery/delivery.wxss */
 .container {
   padding: 20px;
+  height: 100%;
 }
 
 .list-item {
